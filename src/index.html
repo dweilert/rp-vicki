@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RP Discoverer — Find the right retirement plan for you</title>
+    <meta name="description"
+        content="RP (Right Plan Discoverer) is private, local-first retirement planning software for macOS and Windows. Test Social Security timing, Roth conversions, taxes, Medicare costs, and survivor scenarios without linking your financial accounts.">
+    <link rel="canonical" href="https://www.rpdiscoverer.com/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="RP Discoverer — Find the right retirement plan for you">
+    <meta property="og:description"
+        content="Private, local-first retirement planning software. Build the plan yourself, test the decisions that move it, and keep your data on your own machine.">
+    <meta property="og:url" content="https://www.rpdiscoverer.com/">
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Ubuntu:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/site.css">
+</head>
+
+<body>
+    <!-- Announcement bar. Mirrors the "what matters right now" strip on the
+         reference hub site; edit or delete the whole element when there is
+         nothing timely to say. -->
+    <div class="announce">
+        RP is in active development —
+        <a href="#updates">get notified when the next release ships</a>.
+    </div>
+
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="/">RP <span>Discoverer</span></a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="#questions">Questions it answers</a>
+                <a href="#how">How do I…</a>
+                <a href="#trust">Why trust it</a>
+                <a href="#updates">Get updates</a>
+                <a href="https://www.softwarebydaw.com/" rel="noopener">Download</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="wrap">
+                <p class="kicker">Right Plan Discoverer</p>
+                <h1>Can I retire with confidence?</h1>
+                <p class="lede">
+                    RP is private retirement planning software for macOS and Windows. Build a
+                    personal plan, test what-if choices, and see whether your money can support the
+                    life you want — without sales calls or linking your financial accounts.
+                </p>
+                <div class="cta-row">
+                    <a class="btn btn-primary" href="https://www.softwarebydaw.com/" rel="noopener">Download RP</a>
+                    <a class="btn btn-outline" href="#questions">See what it answers</a>
+                    <a class="btn btn-outline" href="#trust">Why trust the math</a>
+                    <a class="btn btn-outline" href="#updates">Get updates</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- "What's happening now" — three cards, same role as the news row on
+             the reference site. Placeholder copy: replace with real items. -->
+        <section id="news" class="alt">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>What's happening now</h2>
+                    <p>Release notes, validation reports, and what is being worked on next.</p>
+                </div>
+                <div class="grid">
+                    <article class="card">
+                        <span class="tag">Release</span>
+                        <h3>Latest RP build</h3>
+                        <p>
+                            Signed installers for macOS and Windows, published with a machine-readable
+                            list of every third-party component the release was built from.
+                        </p>
+                    </article>
+                    <article class="card">
+                        <span class="tag">Validation</span>
+                        <h3>Every release ships a public report</h3>
+                        <p>
+                            Tax, Medicare, Social Security, RMD, and estate calculations are compared
+                            against source documents, and the comparison is published.
+                        </p>
+                    </article>
+                    <article class="card">
+                        <span class="tag">Roadmap</span>
+                        <h3>Agency edition</h3>
+                        <p>
+                            Book-of-business workflow for practices: client plans, reviews, snapshots,
+                            retention opportunities, and daily monitoring.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="questions">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>The questions it helps answer</h2>
+                    <p>
+                        Most tools lead with feature names. RP is organized around the decisions a
+                        household actually has to make.
+                    </p>
+                </div>
+                <div class="grid">
+                    <article class="card">
+                        <h3>Can I retire earlier?</h3>
+                        <p>
+                            Try different retirement dates, income gaps, market crashes, inflation
+                            decades, and longer lifespans in the same plan.
+                        </p>
+                    </article>
+                    <article class="card">
+                        <h3>How much can I spend?</h3>
+                        <p>
+                            Compare fixed budgets, flexible spending guardrails, and a living-standard
+                            estimate that turns savings into a spending plan.
+                        </p>
+                    </article>
+                    <article class="card">
+                        <h3>When should we claim Social Security?</h3>
+                        <p>
+                            Run household claim-age comparisons that price the savings spent while
+                            waiting for a larger benefit.
+                        </p>
+                    </article>
+                    <article class="card">
+                        <h3>Should I convert to Roth?</h3>
+                        <p>
+                            Compare conversion years, annual limits, tax-bracket targets, Medicare
+                            surcharge effects, and survivor impact.
+                        </p>
+                    </article>
+                    <article class="card">
+                        <h3>Will taxes or IRMAA change the answer?</h3>
+                        <p>
+                            Federal, state, and local income tax, capital gains, Social Security
+                            taxation, RMDs, ACA credits, and Medicare Part B/D surcharges.
+                        </p>
+                    </article>
+                    <article class="card">
+                        <h3>What happens to the survivor?</h3>
+                        <p>
+                            Test first-death scenarios, survivor filing status, income floor changes,
+                            insurance needs, and estate outcomes.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick action panel, modeled on the reference hub's "How do I…?" grid. -->
+        <section id="how" class="alt">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>How do I…?</h2>
+                    <p>The short paths. Each one goes straight to the thing, not to a menu.</p>
+                </div>
+                <div class="actions">
+                    <a class="action" href="https://www.softwarebydaw.com/" rel="noopener">
+                        <span class="dot" aria-hidden="true"></span> Download RP for macOS or Windows
+                    </a>
+                    <a class="action" href="#trust">
+                        <span class="dot" aria-hidden="true"></span> Read the validation report
+                    </a>
+                    <a class="action" href="#questions">
+                        <span class="dot" aria-hidden="true"></span> See which decisions RP models
+                    </a>
+                    <a class="action" href="#updates">
+                        <span class="dot" aria-hidden="true"></span> Get notified about new releases
+                    </a>
+                    <a class="action" href="#updates">
+                        <span class="dot" aria-hidden="true"></span> Request information for an agency
+                    </a>
+                    <a class="action" href="mailto:support@softwarebydaw.com">
+                        <span class="dot" aria-hidden="true"></span> Ask a question about my plan
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="start">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>Five things to do before you decide</h2>
+                    <p>Useful whether or not you ever install RP.</p>
+                </div>
+                <ul class="checklist">
+                    <li><strong>Write down the date you want to stop working.</strong> Every other
+                        number in a plan hangs off it.</li>
+                    <li><strong>Add up guaranteed income.</strong> Social Security, pensions,
+                        annuities — what arrives whether markets cooperate or not.</li>
+                    <li><strong>Estimate real spending, not a budget.</strong> Twelve months of
+                        actual outflow beats a category worksheet.</li>
+                    <li><strong>Find the tax-rate gap.</strong> The years between retiring and RMDs
+                        are usually where Roth conversion room lives.</li>
+                    <li><strong>Check the survivor case.</strong> One filing status change can move
+                        the plan more than a market downturn.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="trust" class="alt">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>Why trust the math</h2>
+                    <p>
+                        A retirement plan is easier to trust when it shows what was included, what was
+                        checked, and what was left out.
+                    </p>
+                </div>
+                <div class="grid">
+                    <article class="card">
+                        <h3>See the actual calculation</h3>
+                        <p>
+                            The Engine Viewer shows the real intermediate values behind every number —
+                            RMD divisors, tax-bracket math, IRMAA tier assignment. Not a black box.
+                        </p>
+                    </article>
+                    <article class="card">
+                        <h3>Source citations</h3>
+                        <p>
+                            Tax, Medicare, and Social Security data carries source notes and freshness
+                            checks, so you can see where the numbers came from.
+                        </p>
+                    </article>
+                    <article class="card">
+                        <h3>Known limits, stated up front</h3>
+                        <p>
+                            Approximations and omissions are documented, including which direction a
+                            simplification tends to bias the result.
+                        </p>
+                    </article>
+                    <article class="card">
+                        <h3>Local-first and private</h3>
+                        <p>
+                            No accounts, no cloud sync, no telemetry. Your plan never leaves your
+                            machine unless you export it yourself.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="updates">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>Get updates and request information</h2>
+                    <p>
+                        Release announcements and validation reports. No sales calls, and the list is
+                        not shared or sold.
+                    </p>
+                </div>
+
+                <form class="signup" id="signup-form" novalidate>
+                    <div class="field">
+                        <label for="su-email">Email address</label>
+                        <input type="email" id="su-email" name="email" autocomplete="email" required
+                            placeholder="you@example.com">
+                    </div>
+                    <div class="field">
+                        <label for="su-name">Name <span style="font-weight:400">(optional)</span></label>
+                        <input type="text" id="su-name" name="name" autocomplete="name">
+                    </div>
+                    <div class="field">
+                        <label for="su-interest">I'm interested in</label>
+                        <select id="su-interest" name="interest">
+                            <option value="personal">Planning for my own household</option>
+                            <option value="agency">Using RP in an advisory practice</option>
+                            <option value="both">Both</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="su-note">Anything you want to ask <span
+                                style="font-weight:400">(optional)</span></label>
+                        <textarea id="su-note" name="note" rows="3"></textarea>
+                    </div>
+
+                    <!-- Honeypot. Real people never see this; bots fill it in. -->
+                    <div class="hp" aria-hidden="true">
+                        <label for="su-company">Company</label>
+                        <input type="text" id="su-company" name="company" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Send it</button>
+                    <p class="hint">
+                        Used only to send you RP updates and to answer what you asked.
+                    </p>
+                    <div class="form-status" id="signup-status" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <div class="cols">
+                <div>
+                    <h4>RP Discoverer</h4>
+                    <p style="margin:0">
+                        Right Plan Discoverer — private retirement planning software from
+                        SoftwareByDaW.
+                    </p>
+                </div>
+                <div>
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#questions">Questions it answers</a></li>
+                        <li><a href="#trust">Why trust the math</a></li>
+                        <li><a href="https://www.softwarebydaw.com/" rel="noopener">Download</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="mailto:support@softwarebydaw.com">support@softwarebydaw.com</a></li>
+                        <li><a href="#updates">Request information</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="legal">
+                <p style="margin:0">
+                    RP is planning software, not financial, tax, or legal advice. Projections are
+                    estimates based on the assumptions you enter.
+                </p>
+                <p style="margin:6px 0 0">&copy; <span id="year">2026</span> SoftwareByDaW. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/site.js"></script>
+</body>
+
+</html>

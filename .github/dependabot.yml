@@ -1,0 +1,24 @@
+# Moves the pinned actions in deploy.yml deliberately rather than by accident.
+#
+# Pinning to a commit removes the risk that a tag is MOVED under us. But a pin
+# with nobody watching it is a dependency frozen at whatever it had the day it
+# was pinned, and this workflow assumes an AWS role and republishes the public
+# site. The pin makes a change visible; this makes the change happen.
+#
+# Grouped and monthly on purpose: a single maintainer plus a stream of
+# individual PRs nobody has time to read is indistinguishable from no scanning
+# at all, and worse, it teaches you to close them unread.
+version: 2
+
+updates:
+  # Dependabot rewrites the SHA *and* the trailing `# v4.4.0` comment together,
+  # so the pin stays readable to a person.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "ci"

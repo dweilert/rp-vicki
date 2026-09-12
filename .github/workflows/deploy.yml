@@ -1,0 +1,104 @@
+name: Deploy to Amplify
+
+# Push to main with a change under src/ and the site updates. That is the whole
+# workflow: there is no build step, because the site is static files served as
+# written. `workflow_dispatch` exists to republish the current contents of main
+# without a content change (useful after an Amplify-side setting changes).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-2
+  AMPLIFY_APP_ID: d2lgx3ouccbfu
+  AMPLIFY_BRANCH: main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # ACTIONS ARE PINNED BY COMMIT SHA, NOT BY TAG.
+      #
+      # A tag is a movable label. Whoever controls the action's repository can
+      # repoint v4 at different code, and every workflow that trusts the tag
+      # runs it on the next push with nothing to see in any diff. A SHA is the
+      # content, so an upgrade has to arrive as a commit somebody approved.
+      #
+      # This workflow assumes an AWS role and republishes the whole public
+      # site, so code that runs here can change what visitors are told and
+      # where the download buttons point. Same reasoning as the softwarebydaw
+      # deploy workflow, which this one is modeled on.
+      #
+      # .github/dependabot.yml is the other half: a pin nobody moves is a
+      # dependency frozen at whatever it had the day it was pinned.
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      # Short-lived credentials via GitHub OIDC. No access keys in this repo.
+      # The role trusts exactly repo:dweilert/rp-vicki:ref:refs/heads/main and
+      # can do nothing but deploy to this one Amplify app.
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+        with:
+          role-to-assume: arn:aws:iam::785502284517:role/rpdiscoverer-github-deploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Zip site contents
+        run: |
+          cd src
+          zip -r -q ../site.zip . -x "*.zip"
+
+      - name: Create Amplify deployment
+        id: create
+        run: |
+          RESPONSE=$(aws amplify create-deployment \
+            --app-id "$AMPLIFY_APP_ID" \
+            --branch-name "$AMPLIFY_BRANCH")
+          echo "$RESPONSE" > deployment.json
+          JOB_ID=$(node -pe "require('./deployment.json').jobId")
+          UPLOAD_URL=$(node -pe "require('./deployment.json').zipUploadUrl")
+          echo "job_id=$JOB_ID" >> "$GITHUB_OUTPUT"
+          echo "upload_url=$UPLOAD_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Upload site archive
+        run: |
+          curl -sS -X PUT "${{ steps.create.outputs.upload_url }}" \
+            --upload-file site.zip
+
+      - name: Start deployment
+        run: |
+          aws amplify start-deployment \
+            --app-id "$AMPLIFY_APP_ID" \
+            --branch-name "$AMPLIFY_BRANCH" \
+            --job-id "${{ steps.create.outputs.job_id }}"
+
+      - name: Wait for deployment to finish
+        run: |
+          JOB_ID="${{ steps.create.outputs.job_id }}"
+          for i in $(seq 1 30); do
+            STATUS=$(aws amplify get-job \
+              --app-id "$AMPLIFY_APP_ID" \
+              --branch-name "$AMPLIFY_BRANCH" \
+              --job-id "$JOB_ID" \
+              --query 'job.summary.status' --output text)
+            echo "Status: $STATUS"
+            if [ "$STATUS" = "SUCCEED" ]; then
+              echo "Deployment succeeded."
+              exit 0
+            fi
+            if [ "$STATUS" = "FAILED" ] || [ "$STATUS" = "CANCELLED" ]; then
+              echo "Deployment failed with status $STATUS"
+              exit 1
+            fi
+            sleep 10
+          done
+          echo "Timed out waiting for deployment to finish"
+          exit 1
