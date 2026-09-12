@@ -1,4 +1,4 @@
-/* RP Discoverer — rpdiscoverer.com
+/* Austin Area Firewise Alliance — rpdiscoverer.com
    Plain browser JS, no build step, no dependencies. */
 
 (function () {
@@ -10,27 +10,25 @@
     }
 
     /* ---------------------------------------------------------------
-       Signup / information-request form.
+       Signup / question form.
 
-       There is no collection backend yet, on purpose: the site is static
-       and nothing here should pretend to store an address it cannot store.
-       So the form has two modes.
+       Three states, in order of preference:
 
-       1. No endpoint configured (today). Submitting hands the visitor a
-          prefilled mailto: so the request still reaches a human, and the
-          status line says plainly that nothing was stored.
+       1. AAFA_SIGNUP_ENDPOINT set  -> POST JSON to it.
+       2. Only AAFA_CONTACT_EMAIL set -> open a prefilled mailto and say
+          plainly that nothing was stored.
+       3. Neither set (today) -> say the form is not connected yet and
+          point at the official agency channels, which are always live.
 
-       2. Endpoint configured (later). Set RP_SIGNUP_ENDPOINT in
-          config.js to an HTTPS URL — the planned shape is API Gateway ->
-          Lambda -> DynamoDB in the same account as the Amplify app — and
-          this posts JSON to it instead. See infra/README.md.
+       State 3 exists because this is a wildfire site. Someone with an
+       urgent question must never be left believing a message was sent when
+       nothing received it. That is also why the form never claims to be a
+       way to report a fire — the markup says so above the fields.
 
-       Nothing below is a substitute for the consent and unsubscribe
-       handling a real mailing list needs; that belongs with the backend
-       when it exists.
+       None of this substitutes for the consent and unsubscribe handling a
+       real mailing list needs; that belongs with the backend when it
+       exists. See infra/README.md.
        --------------------------------------------------------------- */
-
-    var CONTACT_EMAIL = "support@softwarebydaw.com";
 
     var form = document.getElementById("signup-form");
     var statusEl = document.getElementById("signup-status");
@@ -38,20 +36,21 @@
         return;
     }
 
-    function setStatus(kind, message) {
+    function setStatus(kind, html) {
         statusEl.className = "form-status show " + kind;
-        statusEl.textContent = message;
+        statusEl.innerHTML = html;
     }
 
-    function mailtoFallback(data) {
-        var subject = "RP Discoverer — information request";
+    function mailtoLink(email, data) {
+        var subject = "Austin Area Firewise Alliance — " + data.interest;
         var body =
             "Email: " + data.email + "\n" +
             "Name: " + (data.name || "(not given)") + "\n" +
-            "Interested in: " + data.interest + "\n\n" +
+            "Area: " + (data.area || "(not given)") + "\n" +
+            "About: " + data.interest + "\n\n" +
             (data.note || "");
         return (
-            "mailto:" + CONTACT_EMAIL +
+            "mailto:" + email +
             "?subject=" + encodeURIComponent(subject) +
             "&body=" + encodeURIComponent(body)
         );
@@ -76,21 +75,34 @@
         var data = {
             email: email,
             name: form.elements.name.value.trim(),
+            area: form.elements.area ? form.elements.area.value.trim() : "",
             interest: form.elements.interest.value,
             note: form.elements.note.value.trim(),
             source: "rpdiscoverer.com"
         };
 
-        var endpoint = window.RP_SIGNUP_ENDPOINT;
+        var endpoint = window.AAFA_SIGNUP_ENDPOINT;
+        var contact = window.AAFA_CONTACT_EMAIL;
 
         if (!endpoint) {
-            var link = mailtoFallback(data);
-            setStatus(
-                "info",
-                "The signup list isn't live yet, so nothing was stored. Your mail app should " +
-                "open with the message ready to send — if it didn't, write to " + CONTACT_EMAIL + "."
-            );
-            window.location.href = link;
+            if (contact) {
+                setStatus(
+                    "info",
+                    "The signup list isn't running yet, so nothing was stored here. Your mail app " +
+                    "should have opened with the message ready to send — if it didn't, write to " +
+                    "<a href=\"mailto:" + contact + "\">" + contact + "</a>."
+                );
+                window.location.href = mailtoLink(contact, data);
+            } else {
+                setStatus(
+                    "info",
+                    "This form isn't connected yet — nothing was stored and nothing was sent. " +
+                    "For anything time-sensitive, use the official channels: call 911 for a fire, " +
+                    "register at <a class=\"ext\" href=\"https://warncentraltexas.org/\" " +
+                    "rel=\"noopener\">Warn Central Texas</a> for alerts, or contact your local fire " +
+                    "department or Emergency Services District."
+                );
+            }
             return;
         }
 
@@ -110,12 +122,13 @@
                     throw new Error("HTTP " + response.status);
                 }
                 form.reset();
-                setStatus("ok", "You're on the list. Watch for the next release note.");
+                setStatus("ok", "Got it. Watch for a confirmation email — the list only adds you once you click the link in it.");
             })
             .catch(function () {
                 setStatus(
                     "err",
-                    "That didn't go through. Try again, or write to " + CONTACT_EMAIL + "."
+                    "That didn't go through. Try again in a moment." +
+                    (contact ? " Or write to <a href=\"mailto:" + contact + "\">" + contact + "</a>." : "")
                 );
             })
             .then(function () {

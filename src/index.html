@@ -4,43 +4,63 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RP Discoverer — Find the right retirement plan for you</title>
+    <title>Austin Area Firewise Alliance — Wildfire preparedness across Travis County</title>
     <meta name="description"
-        content="RP (Right Plan Discoverer) is private, local-first retirement planning software for macOS and Windows. Test Social Security timing, Roth conversions, taxes, Medicare costs, and survivor scenarios without linking your financial accounts.">
+        content="The Austin Area Firewise Alliance helps Travis County neighborhoods prepare for wildfire: defensible space, home hardening, Firewise USA recognition, and evacuation planning for communities with limited exits.">
     <link rel="canonical" href="https://www.rpdiscoverer.com/">
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="RP Discoverer — Find the right retirement plan for you">
+    <meta property="og:title" content="Austin Area Firewise Alliance">
     <meta property="og:description"
-        content="Private, local-first retirement planning software. Build the plan yourself, test the decisions that move it, and keep your data on your own machine.">
+        content="Wildfire preparedness for Travis County neighborhoods — defensible space, home hardening, Firewise USA recognition, and evacuation planning.">
     <meta property="og:url" content="https://www.rpdiscoverer.com/">
+    <meta property="og:image" content="https://www.rpdiscoverer.com/img/aafa-logo.svg">
 
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="img/aafa-logo.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Ubuntu:wght@500;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Oswald:wght@500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/site.css">
 </head>
 
 <body>
-    <!-- Announcement bar. Mirrors the "what matters right now" strip on the
-         reference hub site; edit or delete the whole element when there is
-         nothing timely to say. -->
-    <div class="announce">
-        RP is in active development —
-        <a href="#updates">get notified when the next release ships</a>.
+    <!-- The 911 line is first in the DOM on every page. On a wildfire site it
+         outranks the branding, and a screen reader should reach it first. -->
+    <div class="emergency">
+        <strong>In a fire emergency, call 911.</strong>
+        Official emergency alerts for this region come from
+        <a class="ext" href="https://warncentraltexas.org/" rel="noopener">Warn Central Texas</a> — register your phone.
+    </div>
+
+    <!-- Conditions banner. Worded to stay true between updates: burn ban status
+         changes through the year, so this points at the county's live order
+         rather than asserting a status that can go stale on this page. -->
+    <div class="conditions">
+        <div class="wrap">
+            <span class="label">Before you burn</span>
+            <span>
+                Outdoor burning rules in Travis County change with conditions.
+                <a class="ext" href="https://www.traviscountytx.gov/fire-marshal/burn-ban" rel="noopener">
+                    Check the Fire Marshal's current burn ban order</a> first.
+            </span>
+        </div>
     </div>
 
     <header class="site-header">
         <div class="wrap">
-            <a class="brand" href="/">RP <span>Discoverer</span></a>
+            <a class="brand" href="/">
+                <img src="img/aafa-logo.svg" alt="">
+                <span class="brand-text">Austin Area<br>Firewise Alliance
+                    <span>Travis County, Texas</span>
+                </span>
+            </a>
             <nav class="site-nav" aria-label="Main">
-                <a href="#questions">Questions it answers</a>
-                <a href="#how">How do I…</a>
-                <a href="#trust">Why trust it</a>
-                <a href="#updates">Get updates</a>
-                <a href="https://www.softwarebydaw.com/" rel="noopener">Download</a>
+                <a href="/" aria-current="page">Home</a>
+                <a href="prepare-your-home.html">Prepare Your Home</a>
+                <a href="firewise-communities.html">Firewise Communities</a>
+                <a href="evacuation.html">Evacuation</a>
+                <a href="about.html">About</a>
             </nav>
         </div>
     </header>
@@ -48,202 +68,180 @@
     <main>
         <section class="hero">
             <div class="wrap">
-                <p class="kicker">Right Plan Discoverer</p>
-                <h1>Can I retire with confidence?</h1>
+                <p class="kicker">Travis County, Texas</p>
+                <h1>Wildfire moves fast.<br>Preparation happens before it does.</h1>
                 <p class="lede">
-                    RP is private retirement planning software for macOS and Windows. Build a
-                    personal plan, test what-if choices, and see whether your money can support the
-                    life you want — without sales calls or linking your financial accounts.
+                    The Austin Area Firewise Alliance is a volunteer organization helping Travis
+                    County neighborhoods get ready for wildfire — inside the City of Austin and
+                    out in the county, where the hills, cedar, and one-way-out streets that make
+                    this place worth living in also make it burn.
                 </p>
                 <div class="cta-row">
-                    <a class="btn btn-primary" href="https://www.softwarebydaw.com/" rel="noopener">Download RP</a>
-                    <a class="btn btn-outline" href="#questions">See what it answers</a>
-                    <a class="btn btn-outline" href="#trust">Why trust the math</a>
-                    <a class="btn btn-outline" href="#updates">Get updates</a>
+                    <a class="btn btn-primary" href="prepare-your-home.html">Prepare your home</a>
+                    <a class="btn btn-green" href="firewise-communities.html">Start a Firewise community</a>
+                    <a class="btn btn-outline ext" href="https://warncentraltexas.org/" rel="noopener">Sign up for alerts</a>
+                    <a class="btn btn-outline" href="#updates">Get Alliance updates</a>
                 </div>
             </div>
         </section>
 
-        <!-- "What's happening now" — three cards, same role as the news row on
-             the reference site. Placeholder copy: replace with real items. -->
-        <section id="news" class="alt">
-            <div class="wrap">
-                <div class="section-head">
-                    <h2>What's happening now</h2>
-                    <p>Release notes, validation reports, and what is being worked on next.</p>
-                </div>
-                <div class="grid">
-                    <article class="card">
-                        <span class="tag">Release</span>
-                        <h3>Latest RP build</h3>
-                        <p>
-                            Signed installers for macOS and Windows, published with a machine-readable
-                            list of every third-party component the release was built from.
-                        </p>
-                    </article>
-                    <article class="card">
-                        <span class="tag">Validation</span>
-                        <h3>Every release ships a public report</h3>
-                        <p>
-                            Tax, Medicare, Social Security, RMD, and estate calculations are compared
-                            against source documents, and the comparison is published.
-                        </p>
-                    </article>
-                    <article class="card">
-                        <span class="tag">Roadmap</span>
-                        <h3>Agency edition</h3>
-                        <p>
-                            Book-of-business workflow for practices: client plans, reviews, snapshots,
-                            retention opportunities, and daily monitoring.
-                        </p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section id="questions">
-            <div class="wrap">
-                <div class="section-head">
-                    <h2>The questions it helps answer</h2>
-                    <p>
-                        Most tools lead with feature names. RP is organized around the decisions a
-                        household actually has to make.
-                    </p>
-                </div>
-                <div class="grid">
-                    <article class="card">
-                        <h3>Can I retire earlier?</h3>
-                        <p>
-                            Try different retirement dates, income gaps, market crashes, inflation
-                            decades, and longer lifespans in the same plan.
-                        </p>
-                    </article>
-                    <article class="card">
-                        <h3>How much can I spend?</h3>
-                        <p>
-                            Compare fixed budgets, flexible spending guardrails, and a living-standard
-                            estimate that turns savings into a spending plan.
-                        </p>
-                    </article>
-                    <article class="card">
-                        <h3>When should we claim Social Security?</h3>
-                        <p>
-                            Run household claim-age comparisons that price the savings spent while
-                            waiting for a larger benefit.
-                        </p>
-                    </article>
-                    <article class="card">
-                        <h3>Should I convert to Roth?</h3>
-                        <p>
-                            Compare conversion years, annual limits, tax-bracket targets, Medicare
-                            surcharge effects, and survivor impact.
-                        </p>
-                    </article>
-                    <article class="card">
-                        <h3>Will taxes or IRMAA change the answer?</h3>
-                        <p>
-                            Federal, state, and local income tax, capital gains, Social Security
-                            taxation, RMDs, ACA credits, and Medicare Part B/D surcharges.
-                        </p>
-                    </article>
-                    <article class="card">
-                        <h3>What happens to the survivor?</h3>
-                        <p>
-                            Test first-death scenarios, survivor filing status, income floor changes,
-                            insurance needs, and estate outcomes.
-                        </p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Quick action panel, modeled on the reference hub's "How do I…?" grid. -->
         <section id="how" class="alt">
             <div class="wrap">
                 <div class="section-head">
                     <h2>How do I…?</h2>
-                    <p>The short paths. Each one goes straight to the thing, not to a menu.</p>
+                    <p>
+                        The short paths. Links marked ↗ go to the agency that actually runs that
+                        service — the Alliance points you there, it does not stand in for them.
+                    </p>
                 </div>
                 <div class="actions">
-                    <a class="action" href="https://www.softwarebydaw.com/" rel="noopener">
-                        <span class="dot" aria-hidden="true"></span> Download RP for macOS or Windows
+                    <a class="action ext" href="https://warncentraltexas.org/" rel="noopener">
+                        <span class="dot" aria-hidden="true"></span> Sign up for emergency alerts
                     </a>
-                    <a class="action" href="#trust">
-                        <span class="dot" aria-hidden="true"></span> Read the validation report
+                    <a class="action ext" href="https://www.texaswildfirerisk.com/" rel="noopener">
+                        <span class="dot" aria-hidden="true"></span> Look up my wildfire risk
                     </a>
-                    <a class="action" href="#questions">
-                        <span class="dot" aria-hidden="true"></span> See which decisions RP models
+                    <a class="action" href="prepare-your-home.html#zones">
+                        <span class="dot" aria-hidden="true"></span> Create defensible space
+                    </a>
+                    <a class="action" href="evacuation.html">
+                        <span class="dot" aria-hidden="true"></span> Make an evacuation plan
+                    </a>
+                    <a class="action" href="firewise-communities.html">
+                        <span class="dot" aria-hidden="true"></span> Get my neighborhood recognized
+                    </a>
+                    <a class="action ext" href="https://www.tdem.texas.gov/stear" rel="noopener">
+                        <span class="dot" aria-hidden="true"></span> Register someone who needs evacuation help
+                    </a>
+                    <a class="action ext" href="https://austintexas.gov/department/wildland-urban-interface-code"
+                        rel="noopener">
+                        <span class="dot" aria-hidden="true"></span> Read Austin's WUI code
                     </a>
                     <a class="action" href="#updates">
-                        <span class="dot" aria-hidden="true"></span> Get notified about new releases
-                    </a>
-                    <a class="action" href="#updates">
-                        <span class="dot" aria-hidden="true"></span> Request information for an agency
-                    </a>
-                    <a class="action" href="mailto:support@softwarebydaw.com">
-                        <span class="dot" aria-hidden="true"></span> Ask a question about my plan
+                        <span class="dot" aria-hidden="true"></span> Ask the Alliance a question
                     </a>
                 </div>
             </div>
         </section>
 
-        <section id="start">
+        <section id="five">
             <div class="wrap">
                 <div class="section-head">
-                    <h2>Five things to do before you decide</h2>
-                    <p>Useful whether or not you ever install RP.</p>
+                    <h2>Five things that matter most</h2>
+                    <p>
+                        Most homes lost to wildfire are not overrun by a wall of flame. They are
+                        lit by embers that travel ahead of the fire, land in a gutter or against a
+                        fence, and smolder. Everything below targets embers.
+                    </p>
                 </div>
                 <ul class="checklist">
-                    <li><strong>Write down the date you want to stop working.</strong> Every other
-                        number in a plan hangs off it.</li>
-                    <li><strong>Add up guaranteed income.</strong> Social Security, pensions,
-                        annuities — what arrives whether markets cooperate or not.</li>
-                    <li><strong>Estimate real spending, not a budget.</strong> Twelve months of
-                        actual outflow beats a category worksheet.</li>
-                    <li><strong>Find the tax-rate gap.</strong> The years between retiring and RMDs
-                        are usually where Roth conversion room lives.</li>
-                    <li><strong>Check the survivor case.</strong> One filing status change can move
-                        the plan more than a market downturn.</li>
+                    <li><strong>Clear the first five feet.</strong> No mulch, firewood, dead
+                        plants, or stored items against the house. This strip does more than any
+                        other single thing you can do.</li>
+                    <li><strong>Clean gutters, roof, and under decks.</strong> Dry leaves and
+                        cedar litter are exactly what a landing ember needs.</li>
+                    <li><strong>Screen every vent.</strong> Embers get inside through attic and
+                        crawlspace vents. Metal mesh of 1/8 inch or finer, not fiberglass.</li>
+                    <li><strong>Trim branches back from the roof.</strong> Ten feet of clearance,
+                        and limb up trees so fire on the ground cannot climb into the canopy.</li>
+                    <li><strong>Know your way out before you need it.</strong> Two routes, a
+                        meeting point, and a decision to leave early — especially on a street with
+                        one exit.</li>
                 </ul>
+                <p style="margin-top:22px">
+                    <a class="btn btn-primary" href="prepare-your-home.html">The full home checklist</a>
+                </p>
             </div>
         </section>
 
-        <section id="trust" class="alt">
+        <section id="watch" class="alt">
             <div class="wrap">
                 <div class="section-head">
-                    <h2>Why trust the math</h2>
+                    <h2>Watching conditions</h2>
+                    <p>Local, state, and national feeds. These are live sources, not Alliance reports.</p>
+                </div>
+                <div class="grid">
+                    <article class="card accent">
+                        <span class="tag">County</span>
+                        <h3>Travis County burn ban</h3>
+                        <p>
+                            The Fire Marshal's office issues and lifts outdoor burning restrictions
+                            as conditions change.
+                            <a class="ext" href="https://www.traviscountytx.gov/fire-marshal/burn-ban"
+                                rel="noopener">Current order</a>
+                        </p>
+                    </article>
+                    <article class="card">
+                        <span class="tag">State</span>
+                        <h3>Texas A&amp;M Forest Service</h3>
+                        <p>
+                            Statewide incident activity, fire danger, and the Texas Wildfire Risk
+                            Assessment Portal for property-level risk.
+                            <a class="ext" href="https://tfsweb.tamu.edu/" rel="noopener">Forest Service</a> ·
+                            <a class="ext" href="https://www.texaswildfirerisk.com/" rel="noopener">Risk portal</a>
+                        </p>
+                    </article>
+                    <article class="card">
+                        <span class="tag">National</span>
+                        <h3>InciWeb</h3>
+                        <p>
+                            The interagency incident information system — large-fire updates,
+                            perimeters, and closures.
+                            <a class="ext" href="https://inciweb.wildfire.gov/" rel="noopener">InciWeb</a>
+                        </p>
+                    </article>
+                    <article class="card accent">
+                        <span class="tag">Alerts</span>
+                        <h3>Warn Central Texas</h3>
+                        <p>
+                            The regional notification system. You must register a phone number to
+                            receive calls and texts — it does not find you automatically.
+                            <a class="ext" href="https://warncentraltexas.org/" rel="noopener">Register</a>
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="mission" class="deep">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>What the Alliance does</h2>
                     <p>
-                        A retirement plan is easier to trust when it shows what was included, what was
-                        checked, and what was left out.
+                        Wildfire response belongs to the fire departments. Getting a neighborhood
+                        ready before that day is work residents have to do themselves — and that is
+                        where the Alliance works.
                     </p>
                 </div>
                 <div class="grid">
                     <article class="card">
-                        <h3>See the actual calculation</h3>
+                        <h3>Helps neighborhoods organize</h3>
                         <p>
-                            The Engine Viewer shows the real intermediate values behind every number —
-                            RMD divisors, tax-bracket math, IRMAA tier assignment. Not a black box.
+                            Walking a new group through the Firewise USA steps: the risk
+                            assessment, the action plan, the annual event, the renewal.
                         </p>
                     </article>
                     <article class="card">
-                        <h3>Source citations</h3>
+                        <h3>Connects neighbors to agencies</h3>
                         <p>
-                            Tax, Medicare, and Social Security data carries source notes and freshness
-                            checks, so you can see where the numbers came from.
+                            Travis County is served by the Austin Fire Department and by a set of
+                            Emergency Services Districts. Which one covers you changes who to ask.
                         </p>
                     </article>
                     <article class="card">
-                        <h3>Known limits, stated up front</h3>
+                        <h3>Presses on evacuation planning</h3>
                         <p>
-                            Approximations and omissions are documented, including which direction a
-                            simplification tends to bias the result.
+                            Many neighborhoods here have a single way out. The Alliance asks
+                            agencies the specific questions residents need answered, and shares
+                            what comes back.
                         </p>
                     </article>
                     <article class="card">
-                        <h3>Local-first and private</h3>
+                        <h3>Shares what works</h3>
                         <p>
-                            No accounts, no cloud sync, no telemetry. Your plan never leaves your
-                            machine unless you export it yourself.
+                            What one neighborhood learns about brush disposal, chipper days, or
+                            getting an assessment scheduled should not have to be rediscovered by
+                            the next one.
                         </p>
                     </article>
                 </div>
@@ -253,10 +251,18 @@
         <section id="updates">
             <div class="wrap">
                 <div class="section-head">
-                    <h2>Get updates and request information</h2>
+                    <h2>Get updates · Ask a question</h2>
                     <p>
-                        Release announcements and validation reports. No sales calls, and the list is
-                        not shared or sold.
+                        Preparedness reminders ahead of fire season, Firewise recognition news, and
+                        answers when agencies respond to our questions. The list is not shared or
+                        sold, and there is no charge for anything the Alliance does.
+                    </p>
+                </div>
+
+                <div class="callout">
+                    <p>
+                        <strong>This form is not a way to report a fire or request emergency help.</strong>
+                        Nobody monitors it around the clock. If you see fire or smoke, call 911.
                     </p>
                 </div>
 
@@ -271,17 +277,25 @@
                         <input type="text" id="su-name" name="name" autocomplete="name">
                     </div>
                     <div class="field">
-                        <label for="su-interest">I'm interested in</label>
+                        <label for="su-area">Neighborhood or area <span
+                                style="font-weight:400">(optional)</span></label>
+                        <input type="text" id="su-area" name="area"
+                            placeholder="e.g. Northwest Hills, Lakeway, Bee Cave, unincorporated west county">
+                    </div>
+                    <div class="field">
+                        <label for="su-interest">I'm writing about</label>
                         <select id="su-interest" name="interest">
-                            <option value="personal">Planning for my own household</option>
-                            <option value="agency">Using RP in an advisory practice</option>
-                            <option value="both">Both</option>
+                            <option value="updates">Just add me to the update list</option>
+                            <option value="firewise">Starting or renewing a Firewise community</option>
+                            <option value="presentation">Requesting a presentation for our group</option>
+                            <option value="evacuation">Evacuation planning in my neighborhood</option>
+                            <option value="volunteer">Volunteering with the Alliance</option>
+                            <option value="other">Something else</option>
                         </select>
                     </div>
                     <div class="field">
-                        <label for="su-note">Anything you want to ask <span
-                                style="font-weight:400">(optional)</span></label>
-                        <textarea id="su-note" name="note" rows="3"></textarea>
+                        <label for="su-note">Your question <span style="font-weight:400">(optional)</span></label>
+                        <textarea id="su-note" name="note" rows="4"></textarea>
                     </div>
 
                     <!-- Honeypot. Real people never see this; bots fill it in. -->
@@ -290,9 +304,9 @@
                         <input type="text" id="su-company" name="company" tabindex="-1" autocomplete="off">
                     </div>
 
-                    <button class="btn btn-primary" type="submit">Send it</button>
+                    <button class="btn btn-primary" type="submit">Send</button>
                     <p class="hint">
-                        Used only to send you RP updates and to answer what you asked.
+                        Used only to send Alliance updates and to answer what you asked.
                     </p>
                     <div class="form-status" id="signup-status" role="status" aria-live="polite"></div>
                 </form>
@@ -304,34 +318,52 @@
         <div class="wrap">
             <div class="cols">
                 <div>
-                    <h4>RP Discoverer</h4>
+                    <h4>Austin Area Firewise Alliance</h4>
                     <p style="margin:0">
-                        Right Plan Discoverer — private retirement planning software from
-                        SoftwareByDaW.
+                        Volunteers working on wildfire preparedness with neighborhoods across
+                        Travis County, Texas.
                     </p>
                 </div>
                 <div>
-                    <h4>Product</h4>
+                    <h4>Prepare</h4>
                     <ul>
-                        <li><a href="#questions">Questions it answers</a></li>
-                        <li><a href="#trust">Why trust the math</a></li>
-                        <li><a href="https://www.softwarebydaw.com/" rel="noopener">Download</a></li>
+                        <li><a href="prepare-your-home.html">Prepare your home</a></li>
+                        <li><a href="prepare-your-home.html#zones">Defensible space</a></li>
+                        <li><a href="evacuation.html">Evacuation planning</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4>Contact</h4>
+                    <h4>Organize</h4>
                     <ul>
-                        <li><a href="mailto:support@softwarebydaw.com">support@softwarebydaw.com</a></li>
-                        <li><a href="#updates">Request information</a></li>
+                        <li><a href="firewise-communities.html">Firewise communities</a></li>
+                        <li><a href="about.html">About the Alliance</a></li>
+                        <li><a href="#updates">Get updates</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Official sources</h4>
+                    <ul>
+                        <li><a class="ext" href="https://warncentraltexas.org/" rel="noopener">Warn Central Texas</a></li>
+                        <li><a class="ext" href="https://www.traviscountytx.gov/fire-marshal" rel="noopener">Travis County Fire Marshal</a></li>
+                        <li><a class="ext" href="https://tfsweb.tamu.edu/" rel="noopener">Texas A&amp;M Forest Service</a></li>
+                        <li><a class="ext" href="https://www.nfpa.org/firewise" rel="noopener">Firewise USA (NFPA)</a></li>
                     </ul>
                 </div>
             </div>
             <div class="legal">
-                <p style="margin:0">
-                    RP is planning software, not financial, tax, or legal advice. Projections are
-                    estimates based on the assumptions you enter.
+                <p>
+                    The Austin Area Firewise Alliance is an independent volunteer organization. It
+                    is not the City of Austin, the Austin Fire Department, Travis County, or any
+                    Emergency Services District, and nothing here is an official notice from them.
+                    Emergency instructions always come from those agencies.
                 </p>
-                <p style="margin:6px 0 0">&copy; <span id="year">2026</span> SoftwareByDaW. All rights reserved.</p>
+                <p>
+                    Guidance on this site follows Firewise USA® and NFPA practice. It is general
+                    preparedness information, not a substitute for a site assessment of your own
+                    property. Firewise USA® is a registered program of the National Fire Protection
+                    Association.
+                </p>
+                <p>&copy; <span id="year">2026</span> Austin Area Firewise Alliance.</p>
             </div>
         </div>
     </footer>
