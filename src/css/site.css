@@ -263,20 +263,20 @@ section[id] { scroll-margin-top: 92px; }
 .text-size {
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 1px;
     border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 3px;
+    border-radius: 7px;
+    padding: 2px;
     background: var(--card);
 }
 
 .text-size .label {
     font-family: Oswald, "Arial Narrow", sans-serif;
-    font-size: .78rem;
+    font-size: .7rem;
     text-transform: uppercase;
-    letter-spacing: .08em;
+    letter-spacing: .06em;
     color: var(--sage-text);
-    padding: 0 7px 0 5px;
+    padding: 0 6px 0 4px;
     white-space: nowrap;
 }
 
@@ -287,9 +287,20 @@ section[id] { scroll-margin-top: 92px; }
     color: var(--green-900);
     background: transparent;
     border: 1px solid transparent;
-    border-radius: 6px;
-    padding: 5px 8px;
+    border-radius: 5px;
     cursor: pointer;
+
+    /* 24x24 is the floor, not a starting point: WCAG 2.5.8 sets it as the
+       minimum target size, and this particular control exists for readers
+       who may also have less steady hands. Everything else here shrank;
+       the tap target did not. Padding is zero because the box is sized
+       directly — letting the three different font sizes set the box would
+       make three differently-sized targets. */
+    display: grid;
+    place-items: center;
+    min-width: 24px;
+    min-height: 24px;
+    padding: 0 3px;
 }
 
 .text-size button:hover { background: var(--sage-200); }
@@ -300,15 +311,19 @@ section[id] { scroll-margin-top: 92px; }
     color: #fff;
 }
 
-.text-size button { padding: 6px 9px; }
-
-.text-size .s1 { font-size: .75rem; }
-.text-size .s2 { font-size: 1.06rem; }
-.text-size .s3 { font-size: 1.38rem; }
+.text-size .s1 { font-size: .72rem; }
+.text-size .s2 { font-size: .95rem; }
+.text-size .s3 { font-size: 1.2rem; }
 
 @media (max-width: 640px) {
-    .text-size { order: 3; }
+    /* Sit beside the brand rather than below the nav. The nav takes the full
+       width and wraps to two lines on a phone, so a control placed after it
+       claims a third row of permanently-sticky height — about 44px that never
+       scrolls away. There is unused space to the right of the brand; put it
+       there. */
+    .text-size { order: 2; margin-left: auto; }
     .text-size .label { display: none; }
+    .site-nav { order: 3; }
 }
 
 /* ---------- Buttons ---------- */
