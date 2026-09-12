@@ -1,0 +1,93 @@
+# Deploying a static site: GitHub to AWS
+
+A complete, repeatable setup for hosting a static website on AWS, published
+from GitHub, with **no passwords or access keys stored anywhere**.
+
+Written to be followed by someone who is comfortable with a computer but is not
+a developer, and to be reusable for other sites and other organizations.
+
+## What you end up with
+
+- A website on AWS Amplify Hosting, on your own domain, with HTTPS
+- Editing by saving a file to GitHub — live in about a minute
+- No AWS keys in GitHub. The connection is short-lived tokens that expire in
+  minutes and only work from your repository, on your branch
+- A permission scoped so tightly that the worst a compromised workflow can do
+  is publish a bad version of this one site
+- Every change recorded, and any change reversible
+- A cost alert, because a volunteer organization should hear about a surprise
+  bill from an email rather than a card statement
+
+Under **$25 a year**, nearly all of it the domain name.
+
+## The steps
+
+| | | Time |
+| --- | --- | --- |
+| [01-prerequisites.md](01-prerequisites.md) | AWS account, securing it, domain, GitHub account | ~90 min |
+| [02-deploy-stack.md](02-deploy-stack.md) | Upload one template; it builds the infrastructure | ~10 min |
+| [03-connect-github.md](03-connect-github.md) | Wire the repository to AWS, first publish | ~15 min |
+| [05-runbook.md](05-runbook.md) | Everything afterwards — editing, rollback, removing people, costs | reference |
+
+Do them in order. Step 2 fails in confusing ways if step 1 was not finished.
+
+[`infra/site-stack.yaml`](../infra/site-stack.yaml) is the template. It is
+commented throughout, and the comments explain *why*, not just what — it is
+meant to be read by whoever inherits this.
+
+## How it fits together
+
+```
+  You edit a file  ──push──▶  GitHub  ──▶  GitHub Actions
+                                                │
+                                   asks GitHub for a short-lived token,
+                                   AWS checks it came from your repo
+                                                │
+                                                ▼
+                                        AWS Amplify Hosting
+                                                │
+                                                ▼
+                                        visitors see the site
+```
+
+Permission flows one way. GitHub can publish to AWS; AWS has no access to
+GitHub. Nothing long-lived is stored at either end.
+
+## Two things worth deciding early
+
+**Who owns the accounts.** Register the AWS account and the GitHub account to
+the *organization* rather than to a person, if you can. If that is not possible
+yet, personal works to start — an AWS root email can be changed later, and
+GitHub converts a personal account into an organization without losing
+anything — but write it down as a task rather than discovering it when someone
+becomes unreachable.
+
+Note that a **GitHub Organization is free**: the Free plan covers unlimited
+public and private repositories with unlimited collaborators. Cost is not a
+reason to stay on a personal account. The reason to care is that a personal
+account has exactly one owner and no way to add a second.
+
+**Who can publish.** By default, a push to `main` goes live immediately with no
+review. That is fine for one or two careful people. For a larger group, or for
+a site carrying information people rely on, turn on required pull requests —
+[03-connect-github.md](03-connect-github.md) §3.6.
+
+## If you get stuck
+
+Each step ends with a checklist and a table of common failures with their
+fixes. The two that account for most lost time:
+
+- **Resources seem to have disappeared** — check the region selector, top
+  right of the console
+- **First deploy refused with an authorization error** —
+  [03-connect-github.md](03-connect-github.md) §3.5, which includes how to read
+  what AWS actually saw
+
+## Scope
+
+This covers hosting a static site: HTML, CSS, JavaScript, images. No server, no
+database, no build step.
+
+A separate document will cover the optional admin area — letting non-technical
+people edit part of the site from a browser without touching GitHub — once that
+is built.

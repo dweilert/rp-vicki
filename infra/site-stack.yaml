@@ -1,0 +1,358 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: >
+  Static website on AWS Amplify Hosting, deployed from GitHub Actions with no
+  long-lived AWS keys. Creates the Amplify app and branch, the GitHub OIDC
+  trust, a deploy role scoped to this one app, an optional custom domain, and
+  an optional monthly budget alert.
+
+  Deploy this once per site. Everything it creates is removed by deleting the
+  stack, so a practice run costs nothing but time.
+
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: What is this site called?
+        Parameters:
+          - SiteName
+      - Label:
+          default: Where does the code live?
+        Parameters:
+          - GitHubOwner
+          - GitHubRepo
+          - BranchName
+      - Label:
+          default: Custom domain (leave blank to skip for now)
+        Parameters:
+          - DomainName
+      - Label:
+          default: Safety net
+        Parameters:
+          - BudgetEmail
+          - MonthlyBudgetUSD
+      - Label:
+          default: Advanced — only change if told to
+        Parameters:
+          - CreateGitHubOIDCProvider
+
+    ParameterLabels:
+      SiteName: {default: "Site name (lowercase, no spaces)"}
+      GitHubOwner: {default: "GitHub organization or username"}
+      GitHubRepo: {default: "Repository name"}
+      BranchName: {default: "Branch that publishes the site"}
+      DomainName: {default: "Domain name, without www"}
+      BudgetEmail: {default: "Email for cost alerts"}
+      MonthlyBudgetUSD: {default: "Alert if the month exceeds (US dollars)"}
+      CreateGitHubOIDCProvider: {default: "Create the GitHub identity provider?"}
+
+
+Parameters:
+
+  SiteName:
+    Type: String
+    Description: >
+      Used to name the Amplify app and the deploy role. Lowercase letters,
+      numbers and hyphens only. Example: aafa-site
+    AllowedPattern: "^[a-z0-9][a-z0-9-]{1,40}$"
+    ConstraintDescription: Lowercase letters, numbers and hyphens; 2-41 characters.
+
+  GitHubOwner:
+    Type: String
+    Description: >
+      The organization or user that owns the repository. In
+      github.com/austinfirewise/aafa-site this is austinfirewise.
+    AllowedPattern: "^[A-Za-z0-9][A-Za-z0-9-]{0,38}$"
+
+  GitHubRepo:
+    Type: String
+    Description: >
+      The repository name only, not the full URL. In
+      github.com/austinfirewise/aafa-site this is aafa-site.
+    AllowedPattern: "^[A-Za-z0-9._-]{1,100}$"
+
+  BranchName:
+    Type: String
+    Default: main
+    Description: >
+      Pushing to this branch publishes the site. Nothing else can deploy.
+    AllowedPattern: "^[A-Za-z0-9._/-]{1,100}$"
+
+  DomainName:
+    Type: String
+    Default: ""
+    Description: >
+      Example: example.org (no www, no https://). A Route 53 hosted zone for
+      this domain must already exist in THIS account — see 01-prerequisites.
+      Leave blank to launch on the free amplifyapp.com address and add the
+      domain later by updating the stack.
+
+  BudgetEmail:
+    Type: String
+    Default: ""
+    Description: >
+      Sends a warning if the account's monthly cost passes the figure below.
+      Strongly recommended. Leave blank to skip.
+
+  MonthlyBudgetUSD:
+    Type: Number
+    Default: 10
+    MinValue: 1
+    Description: >
+      This site should cost near zero. A low figure here is a smoke alarm, not
+      a limit — it warns, it does not stop anything.
+
+  CreateGitHubOIDCProvider:
+    Type: String
+    Default: "yes"
+    AllowedValues: ["yes", "no"]
+    Description: >
+      An AWS account can hold only ONE GitHub identity provider. Choose "yes"
+      for the first site in a fresh account. Choose "no" if a previous stack
+      or another site already created it — otherwise this stack fails with
+      "provider already exists". 01-prerequisites shows how to check.
+
+
+Conditions:
+  MakeOIDCProvider: !Equals [!Ref CreateGitHubOIDCProvider, "yes"]
+  HasDomain: !Not [!Equals [!Ref DomainName, ""]]
+  HasBudget: !Not [!Equals [!Ref BudgetEmail, ""]]
+
+
+Resources:
+
+  # ------------------------------------------------------------------
+  # Trust between this AWS account and GitHub Actions.
+  #
+  # This is what lets a workflow deploy without an access key stored in
+  # GitHub. The workflow asks GitHub for a short-lived token, AWS checks
+  # that the token came from the right repository and branch, and hands
+  # back credentials that expire in minutes.
+  # ------------------------------------------------------------------
+  GitHubOIDCProvider:
+    Type: AWS::IAM::OIDCProvider
+    Condition: MakeOIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+        - 1c58a3a8518e8759bf075b76b750d4f2df264fcd
+
+  # ------------------------------------------------------------------
+  # The role the workflow assumes.
+  #
+  # Two things keep this safe, and both matter:
+  #
+  #   WHO can assume it — the trust policy below names one repository and
+  #   one branch. A fork, a pull request from a stranger, or a different
+  #   branch of the same repository cannot assume it.
+  #
+  #   WHAT it can do — the policy grants six Amplify actions on ONE app.
+  #   It cannot read S3, touch IAM, change DNS, or deploy any other site,
+  #   so the worst case if a workflow is compromised is a bad version of
+  #   this one site, which you fix by pushing a good one.
+  #
+  # THE TWO SUBJECT PATTERNS ARE NOT A MISTAKE. GitHub normally identifies
+  # a workflow as "repo:owner/name:ref:refs/heads/main", but some accounts
+  # issue an ID-suffixed form, "repo:owner@1234/name@5678:ref:...". Which
+  # one you get is not something you can tell in advance, and a role that
+  # trusts only the first fails with "Not authorized to perform
+  # sts:AssumeRoleWithWebIdentity" — with nothing on screen explaining why.
+  # Both forms are listed so it works either way. The wildcards cover only
+  # the numeric IDs; the owner and repository names are still pinned, and
+  # a GitHub name cannot contain "@", so no one can register a name that
+  # impersonates the pattern.
+  # ------------------------------------------------------------------
+  DeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${SiteName}-github-deploy"
+      Description: !Sub "Lets ${GitHubOwner}/${GitHubRepo} (${BranchName}) deploy to the ${SiteName} Amplify app. Nothing else."
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com"
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                "token.actions.githubusercontent.com:aud": sts.amazonaws.com
+              StringLike:
+                "token.actions.githubusercontent.com:sub":
+                  - !Sub "repo:${GitHubOwner}/${GitHubRepo}:ref:refs/heads/${BranchName}"
+                  - !Sub "repo:${GitHubOwner}@*/${GitHubRepo}@*:ref:refs/heads/${BranchName}"
+      Policies:
+        - PolicyName: amplify-deploy-scoped
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - amplify:CreateDeployment
+                  - amplify:StartDeployment
+                  - amplify:GetApp
+                  - amplify:GetBranch
+                  - amplify:GetJob
+                  - amplify:ListJobs
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:amplify:${AWS::Region}:${AWS::AccountId}:apps/${SiteApp.AppId}"
+                  - !Sub "arn:${AWS::Partition}:amplify:${AWS::Region}:${AWS::AccountId}:apps/${SiteApp.AppId}/*"
+      Tags:
+        - {Key: site, Value: !Ref SiteName}
+
+  # ------------------------------------------------------------------
+  # The Amplify app: a CDN-backed host for a folder of files.
+  #
+  # No Repository property on purpose. Amplify can connect to GitHub and
+  # build on its own, but that path needs a GitHub token stored in AWS and
+  # gives Amplify write access to the repository. Uploading a zip from a
+  # workflow keeps the permission flowing one way — GitHub can publish to
+  # AWS, AWS has no access to GitHub.
+  # ------------------------------------------------------------------
+  SiteApp:
+    Type: AWS::Amplify::App
+    Properties:
+      Name: !Ref SiteName
+      Description: !Sub "${SiteName} — static site, deployed from ${GitHubOwner}/${GitHubRepo}"
+      Platform: WEB
+      CustomRules:
+        # Send the bare domain to www so the site has one canonical address.
+        # Skipped entirely when no domain is configured yet.
+        - !If
+          - HasDomain
+          - Source: !Sub "https://${DomainName}"
+            Target: !Sub "https://www.${DomainName}"
+            Status: "302"
+          - !Ref AWS::NoValue
+        # Unmatched paths get the site's own 404 page.
+        #
+        # Amplify implements this as a REDIRECT to the target, so a missing
+        # page answers 302 and then 200 — it does not serve the 404 body
+        # under a 404 status. That is Amplify's behaviour and no rule can
+        # change it. Put <meta name="robots" content="noindex"> in your
+        # 404.html so the soft 404 never enters a search index. The
+        # alternative is deleting this rule and accepting an unbranded
+        # default page that does return a true 404.
+        - Source: "/<*>"
+          Target: /404.html
+          Status: "404"
+      Tags:
+        - {Key: site, Value: !Ref SiteName}
+
+  # ------------------------------------------------------------------
+  # EnableAutoBuild is false because there is no build. The workflow
+  # uploads finished files; Amplify only serves them.
+  # ------------------------------------------------------------------
+  SiteBranch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      AppId: !GetAtt SiteApp.AppId
+      BranchName: !Ref BranchName
+      Description: Live site. Deployed by GitHub Actions.
+      Stage: PRODUCTION
+      EnableAutoBuild: false
+      Tags:
+        - {Key: site, Value: !Ref SiteName}
+
+  # ------------------------------------------------------------------
+  # Custom domain.
+  #
+  # Amplify requests the TLS certificate and writes the DNS records itself,
+  # because the hosted zone is in this same account. Expect 15-45 minutes
+  # on first creation; the stack sits in CREATE_IN_PROGRESS meanwhile. That
+  # is normal, not a hang.
+  # ------------------------------------------------------------------
+  SiteDomain:
+    Type: AWS::Amplify::Domain
+    Condition: HasDomain
+    Properties:
+      AppId: !GetAtt SiteApp.AppId
+      DomainName: !Ref DomainName
+      EnableAutoSubDomain: false
+      SubDomainSettings:
+        - BranchName: !Ref BranchName
+          Prefix: ""
+        - BranchName: !Ref BranchName
+          Prefix: www
+
+  # ------------------------------------------------------------------
+  # Cost smoke alarm. A static site like this should cost a few dollars a
+  # year, nearly all of it the domain registration. A bill that climbs
+  # means something is wrong, and a volunteer organisation should hear
+  # about it from an email rather than from a card statement.
+  # ------------------------------------------------------------------
+  CostAlert:
+    Type: AWS::Budgets::Budget
+    Condition: HasBudget
+    Properties:
+      Budget:
+        BudgetName: !Sub "${SiteName}-monthly"
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit:
+          Amount: !Ref MonthlyBudgetUSD
+          Unit: USD
+      NotificationsWithSubscribers:
+        # Warn at 80% of actual spend...
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 80
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref BudgetEmail
+        # ...and again when AWS forecasts the month will exceed it, which
+        # usually arrives days earlier than the actual figure.
+        - Notification:
+            NotificationType: FORECASTED
+            ComparisonOperator: GREATER_THAN
+            Threshold: 100
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref BudgetEmail
+
+
+Outputs:
+
+  AmplifyAppId:
+    Description: Put this in the workflow file as AMPLIFY_APP_ID.
+    Value: !GetAtt SiteApp.AppId
+
+  DeployRoleArn:
+    Description: Put this in the workflow file as role-to-assume.
+    Value: !GetAtt DeployRole.Arn
+
+  AwsRegion:
+    Description: Put this in the workflow file as AWS_REGION.
+    Value: !Ref AWS::Region
+
+  BranchNameOut:
+    Description: Put this in the workflow file as AMPLIFY_BRANCH.
+    Value: !Ref BranchName
+
+  TemporaryUrl:
+    Description: >
+      Works immediately, with or without a custom domain. Use it to confirm
+      the first deploy before DNS finishes.
+    Value: !Sub "https://${BranchName}.${SiteApp.DefaultDomain}"
+
+  LiveUrl:
+    Condition: HasDomain
+    Description: The real address, once the certificate and DNS are ready.
+    Value: !Sub "https://www.${DomainName}"
+
+  WorkflowEnvBlock:
+    Description: >
+      Copy these four lines into .github/workflows/deploy.yml — see
+      03-connect-github.
+    Value: !Sub |
+      AWS_REGION: ${AWS::Region}
+      AMPLIFY_APP_ID: ${SiteApp.AppId}
+      AMPLIFY_BRANCH: ${BranchName}
+      role-to-assume: ${DeployRole.Arn}
