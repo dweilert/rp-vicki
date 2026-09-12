@@ -35,11 +35,70 @@ change to the header or footer is a change to **every** page — check them all.
 
 ## Previewing locally
 
+**Just open the file.** Double-click any `.html` file in `src/` and it opens in
+your browser, fully styled, with working navigation between pages. Edit, save,
+refresh. No server, no Python, no tooling.
+
+That works because every internal link is relative (`index.html`, not `/`).
+Keep it that way — a single `href="/"` breaks preview-by-double-click for
+everyone editing without a web server, and gains nothing on the deployed site.
+
+If you want auto-reload on save, the **Live Server** extension for VS Code does
+it in one click (right-click the file → "Open with Live Server"). Optional.
+
+A local web server is also fine if you already have one:
+
 ```bash
+# macOS / Linux
 python3 -m http.server 8080 --directory src
 ```
 
+```bash
+# Windows
+python -m http.server 8080 --directory src
+```
+
 Then open `http://localhost:8080`.
+
+**Do not use the Claude desktop app's built-in preview pane for this site.** It
+renders local HTML as a static snapshot on a `data:` origin, so `site.css`
+never loads and the page appears as unstyled raw text. Nothing is wrong with
+the file — use a real browser, or check the deployed site.
+
+## Working on this from Windows
+
+Everything needed is in this repository. Do not copy the folder from another
+machine; clone it, or the two copies drift apart silently.
+
+One-time setup:
+
+1. Install **Git for Windows** (bundles Git Credential Manager for sign-in), or
+   **GitHub Desktop** if you would rather not use a terminal.
+2. Install **VS Code**, or any text editor.
+3. Get added as a collaborator on `dweilert/rp-vicki`. The repo is public, so
+   you can clone it without that — but pushing needs write access.
+
+```bash
+git clone https://github.com/dweilert/rp-vicki.git
+```
+
+Each editing session:
+
+```bash
+git pull
+```
+
+Edit files under `src/`, preview by double-clicking the page, then:
+
+```bash
+git add -A
+git commit -m "short description of the change"
+git push
+```
+
+**A push to `main` publishes to rpdiscoverer.com within about a minute.** There
+is no staging step and no review gate. Preview locally before pushing, and when
+in doubt push to a branch and open a pull request instead.
 
 ## Editing rules worth keeping
 
