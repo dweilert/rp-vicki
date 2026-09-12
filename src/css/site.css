@@ -704,9 +704,22 @@ section { padding: 52px 0; }
 
 @media (max-width: 640px) {
     .site-header .wrap { min-height: 64px; padding-block: 10px; }
-    .site-nav { gap: 14px; width: 100%; margin-left: 0; }
-    .site-nav a { font-size: .88rem; }
+
+    /* Five items have to clear 335px of usable width on a 375px phone, and at
+       the desktop label lengths they need 438px — so the nav wrapped to a
+       second permanently-sticky row. "Prepare Your Home" drops to "Prepare"
+       here and the gap tightens; the accessible name on the link stays the
+       full phrase, so a screen reader still announces "Prepare your home".
+       (WCAG 2.5.3 is satisfied because the visible text is contained in it.) */
+    .site-nav { gap: 10px; width: 100%; margin-left: 0; }
+    .site-nav a { font-size: .85rem; }
+
     .brand img { height: 36px; }
+
+    /* The banner label sat on its own line, costing a full line of a
+       three-line block. Inline on a phone; the sentence carries the meaning. */
+    .conditions { font-size: .9rem; padding: 10px 16px; }
+    .conditions .wrap { gap: 6px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
