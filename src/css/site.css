@@ -251,7 +251,14 @@ section[id] { scroll-margin-top: 92px; }
    fiddling and every intermediate value is a layout we never checked.
 
    Each button shows its own effect — the letters are literally sized to what
-   they do — so the control explains itself without instructions. */
+   they do — so the control explains itself without instructions.
+
+   The label is a word, not an "Aa" glyph. "Aa" was the same letterform as the
+   buttons beside it, so the row read as four controls rather than a label plus
+   three. It is also the readers least fluent with the web who most need this
+   control, and they are the least likely to recognise ascending A's as a size
+   picker. Below 640px the label drops and the three A's stand alone, which is
+   the conventional pattern and needs the room more than it needs the word. */
 
 .text-size {
     display: flex;
@@ -265,10 +272,12 @@ section[id] { scroll-margin-top: 92px; }
 
 .text-size .label {
     font-family: Oswald, "Arial Narrow", sans-serif;
-    font-size: .8rem;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
     color: var(--sage-text);
-    padding: 0 5px 0 3px;
-    letter-spacing: .02em;
+    padding: 0 7px 0 5px;
+    white-space: nowrap;
 }
 
 .text-size button {
@@ -291,12 +300,15 @@ section[id] { scroll-margin-top: 92px; }
     color: #fff;
 }
 
-.text-size .s1 { font-size: .8rem; }
-.text-size .s2 { font-size: 1rem; }
-.text-size .s3 { font-size: 1.2rem; }
+.text-size button { padding: 6px 9px; }
+
+.text-size .s1 { font-size: .75rem; }
+.text-size .s2 { font-size: 1.06rem; }
+.text-size .s3 { font-size: 1.38rem; }
 
 @media (max-width: 640px) {
     .text-size { order: 3; }
+    .text-size .label { display: none; }
 }
 
 /* ---------- Buttons ---------- */
