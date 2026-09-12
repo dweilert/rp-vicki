@@ -48,7 +48,7 @@ Amplify app and the deploy role.
 
 **Branch that publishes the site** — `main` unless you have a reason.
 
-**Domain name** — `example.org`, with no `www` and no `https://`. **Leave it
+**Domain name** — `austinareafirewise.org`, with no `www` and no `https://`. **Leave it
 blank** if you are not attaching a domain yet; the site still works on its free
 address and you can add the domain later by updating this same stack.
 

@@ -24,7 +24,7 @@ Under **$25 a year**, nearly all of it the domain name.
 
 | | | Time |
 | --- | --- | --- |
-| [01-prerequisites.md](01-prerequisites.md) | AWS account, securing it, domain, GitHub account | ~90 min |
+| [01-prerequisites.md](01-prerequisites.md) | AWS account, securing it, domain, GitHub organization | ~90 min |
 | [02-deploy-stack.md](02-deploy-stack.md) | Upload one template; it builds the infrastructure | ~10 min |
 | [03-connect-github.md](03-connect-github.md) | Wire the repository to AWS, first publish | ~15 min |
 | [05-runbook.md](05-runbook.md) | Everything afterwards — editing, rollback, removing people, costs | reference |
@@ -55,17 +55,18 @@ GitHub. Nothing long-lived is stored at either end.
 
 ## Two things worth deciding early
 
-**Who owns the accounts.** Register the AWS account and the GitHub account to
-the *organization* rather than to a person, if you can. If that is not possible
-yet, personal works to start — an AWS root email can be changed later, and
-GitHub converts a personal account into an organization without losing
-anything — but write it down as a task rather than discovering it when someone
-becomes unreachable.
+**Who owns the accounts.** Use a GitHub **Organization**, not a personal
+account, and give it two owners. Organizations are free — the Free plan covers
+unlimited private repositories, unlimited collaborators, and the Actions
+minutes that publish the site. The reason to bother is that an organization can
+have a second owner and a personal account cannot have any, so a personal
+account is one unreachable person away from nobody being able to change the
+site.
 
-Note that a **GitHub Organization is free**: the Free plan covers unlimited
-public and private repositories with unlimited collaborators. Cost is not a
-reason to stay on a personal account. The reason to care is that a personal
-account has exactly one owner and no way to add a second.
+Register the AWS account to an organization email too, if one exists. If it
+does not yet, a personal address works to start — AWS root email can be changed
+later — but put it on the list in [05-runbook.md](05-runbook.md) rather than
+discovering it at a bad moment.
 
 **Who can publish.** By default, a push to `main` goes live immediately with no
 review. That is fine for one or two careful people. For a larger group, or for

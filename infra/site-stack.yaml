@@ -83,7 +83,7 @@ Parameters:
     Type: String
     Default: ""
     Description: >
-      Example: example.org (no www, no https://). A Route 53 hosted zone for
+      Example: austinareafirewise.org (no www, no https://). A Route 53 hosted zone for
       this domain must already exist in THIS account — see 01-prerequisites.
       Leave blank to launch on the free amplifyapp.com address and add the
       domain later by updating the stack.

@@ -126,7 +126,21 @@ Either way you need a hosted zone, below.
 
 **To register a new domain in AWS:** console search → **Route 53** →
 **Registered domains** → **Register domains**. Roughly $13–15 a year for a
-`.com` or `.org`. Registering here creates the hosted zone automatically.
+`.com` or `.org`. Registering here creates the hosted zone automatically, which
+is why it is the easiest path.
+
+For this site the domain is **`austinareafirewise.org`**. It matches the
+organization's name and wordmark, which helps people confirm the site is
+genuinely the Alliance's, and "Area" signals the countywide scope rather than
+just the city.
+
+Consider registering **`austinfirewise.org`** at the same time and pointing it
+here. It is the shorter form people will guess or misremember, and about $14 a
+year stops someone else holding it.
+
+> **Register it in the organization's AWS account**, not on a personal
+> registrar account. Same reasoning as 1.1, and domains are harder to move than
+> accounts.
 
 **To create a hosted zone for a domain you already own:** Route 53 → **Hosted
 zones** → **Create hosted zone** → enter the domain → **Public hosted zone**.
@@ -142,47 +156,50 @@ aws route53 list-hosted-zones --query "HostedZones[].Name" --output text
 Your domain should be in that list, with a trailing dot. If it is not, the
 template in step 2 will fail when it tries to set up the certificate.
 
-> **Buy the domain in the organization's AWS account**, not on a personal
-> registrar account. It is the same reasoning as 1.1, and domains are harder to
-> move than accounts.
-
-## 1.7 Create the GitHub account and repository
+## 1.7 Create the GitHub organization and repository
 
 GitHub holds the website's files and publishes them to AWS.
 
-1. Create an account at <https://github.com/> using the organization's name as
-   the username — `austinfirewise` — and `vicki@vickilandon.com` as the email
-2. Turn on two-factor authentication straight away: click your avatar →
-   **Settings** → **Password and authentication** → **Enable two-factor
-   authentication**. GitHub requires this now, and this account can change the
-   live website
-3. Save the recovery codes somewhere other than the phone running the
-   authenticator
+A GitHub **Organization** is free — the Free plan covers unlimited public and
+private repositories and unlimited collaborators, and GitHub Actions, which is
+what publishes the site. The paid tiers add enterprise features this site will
+never need.
 
-Then create the repository: **+** → **New repository**, named `aafa-site`.
+Use an organization rather than a personal account for one reason that matters
+more than any feature: **an organization can have two owners, and a personal
+account cannot have any.** If the single owner of a personal account is
+unreachable — ill, travelling, or no longer involved — nobody can add a
+collaborator, transfer the repository, or recover access. It needs their
+password and their phone.
+
+1. Create a personal GitHub account first if you do not have one, at
+   <https://github.com/>. Every organization is administered through a personal
+   account; there is no way to skip this step
+2. Turn on two-factor authentication on it: avatar → **Settings** → **Password
+   and authentication** → **Enable two-factor authentication**. Save the
+   recovery codes somewhere other than the phone running the authenticator
+3. Then avatar → **Settings** → **Organizations** → **New organization** →
+   choose the **Free** plan
+4. Name it `austinfirewise`, with `vicki@vickilandon.com` as the contact email
+5. **Add a second owner now, while you are thinking about it.** Organization
+   **Settings** → **People** → invite them → change their role to **Owner**.
+   An organization with one owner has the same weakness as a personal account,
+   it just hides it better
+
+Then create the repository: organization page → **New repository**, named
+`aafa-site`, owned by the organization rather than by you.
 
 Public or private both work. Public means anyone can read the site's source —
 usually fine, and it lets others learn from your setup — but note that your AWS
 account number and the deploy role's name become visible. Neither grants any
 access on its own, and the role only trusts your repository. If that still
-feels uncomfortable, choose private; nothing else changes.
+feels uncomfortable, choose private; nothing else changes, and Actions minutes
+are free either way at this volume.
 
-> **One owner is a single point of failure.** A personal GitHub account has
-> exactly one owner and no way to add a second. If that person is unreachable —
-> ill, travelling, or no longer involved — nobody can add a collaborator,
-> transfer the repository, or recover the account. It needs their password and
-> their phone.
->
-> **A GitHub Organization is free** and can have two owners, either of whom can
-> act alone. The Free plan covers unlimited public and private repositories with
-> unlimited collaborators; the paid tiers add enterprise features this site will
-> never need. Cost is not a reason to avoid one.
->
-> You can start personal and convert later — GitHub converts a personal account
-> into an organization without losing repositories or history. If you stay
-> personal for now, at minimum make sure a second person can reach the account's
-> recovery codes, and put the conversion on the list in
-> [05-runbook.md](05-runbook.md).
+> **If you already started on a personal account,** nothing is lost. GitHub
+> converts a personal account into an organization without losing repositories,
+> history, or issues: **Settings** → **Organizations** → **Turn <account> into
+> an organization**. Do it before other people depend on the account, not after.
 
 ## 1.8 Check whether the GitHub identity provider already exists
 

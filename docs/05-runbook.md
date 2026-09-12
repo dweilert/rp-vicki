@@ -54,12 +54,9 @@ current template** → change the **Domain name** parameter → through to
 
 Do all of these, the same day:
 
-1. **GitHub** — if the repository is on an organization, **Settings** →
-   **People** → remove them, confirming another Owner remains first. If it is
-   on a personal account and *they* held that account, you cannot remove them —
-   you have to change the account's password and 2FA, which requires their
-   cooperation or GitHub support. This is the cost of a personal account, and
-   it is the moment it gets paid.
+1. **GitHub** — organization **Settings** → **People** → remove them. If they
+   were an Owner, confirm another Owner remains first, or you will lock
+   yourself out of your own organization.
 2. **AWS console** — IAM → Users → delete their user, or at minimum delete
    their access keys and console password.
 3. **Access keys** — if they ever had keys on a shared machine, delete those
@@ -72,18 +69,23 @@ Removing someone from GitHub does not remove their AWS access, and vice versa.
 They are separate systems that happen to trust each other for one narrow
 purpose.
 
-## Move to organization-owned accounts
+## Move the AWS account to an organization email
 
-Worth doing as soon as the organization has a usable email address.
+Worth doing as soon as the organization has a usable address, if it was set up
+on a personal one.
 
 AWS console → account name (top right) → **Account** → **Contact
 Information** / root user email → **Edit**. AWS sends a confirmation to both
-the old and new addresses, so do this while the old mailbox still works.
+the old and new addresses, so do this **while the old mailbox still works** —
+after it stops working this becomes a support case.
 
-On GitHub, if the repository sits on a personal account, convert it: **Settings**
-→ **Organizations** → **Turn <account> into an organization**. Repositories,
-history, and issues carry over. Then add a second owner — that is the whole
-point, and the Free plan allows it.
+## Check the organization still has two owners
+
+Worth glancing at once a year, and whenever someone joins or leaves.
+
+GitHub → organization **Settings** → **People** → filter by role **Owner**. If
+there is only one name there, the organization has quietly become a personal
+account with extra steps. Promote a second person.
 
 ## Check what the site is costing
 
