@@ -30,16 +30,17 @@ About 10 minutes of work, plus waiting if you are attaching a domain.
 
 The form is grouped to match the order below.
 
-**Stack name** — `aafa-site`, or the site name plus `-site`. This names the
-stack itself, not the website.
+**Stack name** — `aafa-site`. This names the stack itself, not the website
+and not the repository; it is only how you find this set of resources again.
 
 **Site name** — lowercase, no spaces, e.g. `aafa-site`. Used to name the
-Amplify app and the deploy role.
+Amplify app and the deploy role. It does not have to match the repository
+name.
 
 **GitHub organization or username** — just the owner. In
-`github.com/austinfirewise/aafa-site`, this is `austinfirewise`.
+`github.com/austinareafirewise/website`, this is `austinareafirewise`.
 
-**Repository name** — just the repository. In that same example, `aafa-site`.
+**Repository name** — just the repository. In that same example, `website`.
 
 > Getting either of these wrong is the most common mistake, and it fails in a
 > confusing way — the stack builds perfectly, and then the first deploy is

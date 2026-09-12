@@ -134,7 +134,7 @@ organization's name and wordmark, which helps people confirm the site is
 genuinely the Alliance's, and "Area" signals the countywide scope rather than
 just the city.
 
-Consider registering **`austinfirewise.org`** at the same time and pointing it
+Consider registering **`austinareafirewise.org`** at the same time and pointing it
 here. It is the shorter form people will guess or misremember, and about $14 a
 year stops someone else holding it.
 
@@ -180,14 +180,14 @@ password and their phone.
    recovery codes somewhere other than the phone running the authenticator
 3. Then avatar → **Settings** → **Organizations** → **New organization** →
    choose the **Free** plan
-4. Name it `austinfirewise`, with `vicki@vickilandon.com` as the contact email
+4. Name it `austinareafirewise`, with `vicki@vickilandon.com` as the contact email
 5. **Add a second owner now, while you are thinking about it.** Organization
    **Settings** → **People** → invite them → change their role to **Owner**.
    An organization with one owner has the same weakness as a personal account,
    it just hides it better
 
 Then create the repository: organization page → **New repository**, named
-`aafa-site`, owned by the organization rather than by you.
+`website`, owned by the organization rather than by you.
 
 Public or private both work. Public means anyone can read the site's source —
 usually fine, and it lets others learn from your setup — but note that your AWS

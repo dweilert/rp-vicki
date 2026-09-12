@@ -62,14 +62,14 @@ Parameters:
     Type: String
     Description: >
       The organization or user that owns the repository. In
-      github.com/austinfirewise/aafa-site this is austinfirewise.
+      github.com/austinareafirewise/website this is austinareafirewise.
     AllowedPattern: "^[A-Za-z0-9][A-Za-z0-9-]{0,38}$"
 
   GitHubRepo:
     Type: String
     Description: >
       The repository name only, not the full URL. In
-      github.com/austinfirewise/aafa-site this is aafa-site.
+      github.com/austinareafirewise/website this is "website".
     AllowedPattern: "^[A-Za-z0-9._-]{1,100}$"
 
   BranchName:
