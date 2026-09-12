@@ -11,9 +11,16 @@
     --green-700: #265438;
     --green-500: #4c784b;
     --sage: #8ca295;
+    --sage-text: #5c7265;   /* 4.97:1 on the page background; --sage is 2.6:1 */
     --sage-200: #d7e0d9;
+    /* Two oranges on purpose. --orange is the brand tone, used only for
+       decoration: dots, rules, card top-borders, focus rings. It is too light
+       to carry text (white on it is 3.06:1, well under the 4.5:1 AA needs).
+       --orange-dark is the text/action tone: 5.29:1 with white, 4.7:1 on the
+       alert background. Anything with words in it uses the dark one. */
     --orange: #da7b37;
-    --orange-dark: #b8601f;
+    --orange-dark: #a85512;
+    --orange-darker: #8f4409;
     --peach: #edbd9b;
 
     --ink: #1d2a21;
@@ -32,13 +39,21 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+/* Root size is the hook the Aa control turns. Everything sized in rem
+   follows it. 100% (not a px value) is deliberate: it inherits whatever the
+   reader has already set as their browser's default font size, so someone who
+   configured that once — often the people who need it most — keeps it, and
+   the Aa control multiplies from there rather than overriding them. */
+html {
+    scroll-behavior: smooth;
+    font-size: calc(100% * var(--text-scale, 1));
+}
 
 body {
     margin: 0;
     background: var(--page);
     color: var(--ink);
-    font: 400 17px/1.65 "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font: 400 1.0625rem/1.65 "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -49,8 +64,8 @@ h1, h2, h3, h4 {
     letter-spacing: .01em;
 }
 
-h1 { font-size: clamp(2.1rem, 4.6vw, 3.2rem); font-weight: 600; text-transform: uppercase; }
-h2 { font-size: clamp(1.55rem, 3vw, 2.15rem); font-weight: 600; }
+h1 { font-size: clamp(2.1rem, 1.2rem + 2.6vw, 3.2rem); font-weight: 600; text-transform: uppercase; }
+h2 { font-size: clamp(1.55rem, 0.9rem + 1.7vw, 2.15rem); font-weight: 600; }
 h3 { font-size: 1.18rem; font-weight: 500; }
 h4 { font-size: 1rem; font-weight: 600; }
 
@@ -71,6 +86,50 @@ section[id] { scroll-margin-top: 92px; }
     padding: 0; margin: -1px;
     overflow: hidden; clip: rect(0 0 0 0);
     white-space: nowrap; border: 0;
+}
+
+/* ---------- Keyboard access ----------
+
+   Skip link: every page repeats the emergency strip, the conditions banner,
+   the brand, and five nav links before the content starts. Someone tabbing
+   through — or listening to a screen reader — should not have to walk all of
+   that on every page. Hidden until focused, then it lands in the top-left.
+
+   Focus ring: the browser default is easy to lose against these backgrounds,
+   and it disappears entirely on elements that get a custom background. Using
+   :focus-visible means pointer users never see it and keyboard users always
+   do. Applied globally rather than per-component so a new link added later
+   inherits it without anyone remembering to. */
+
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    background: var(--green-900);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 0 0 8px 0;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    left: 0;
+    color: #fff;
+}
+
+:focus-visible {
+    outline: 3px solid var(--orange-dark);
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+/* On the dark green sections the dark orange ring is hard to see. */
+.deep :focus-visible,
+.emergency :focus-visible,
+.site-footer :focus-visible {
+    outline-color: var(--peach);
 }
 
 /* ---------- Emergency strip ----------
@@ -151,14 +210,14 @@ section[id] { scroll-margin-top: 92px; }
     font-size: 1.02rem;
     line-height: 1.1;
     letter-spacing: .02em;
-    color: var(--orange);
+    color: var(--orange-dark);
 }
 
 .brand .brand-text span {
     display: block;
     font-size: .66rem;
     letter-spacing: .13em;
-    color: var(--sage);
+    color: var(--sage-text);
 }
 
 .site-nav {
@@ -184,6 +243,62 @@ section[id] { scroll-margin-top: 92px; }
     border-bottom-color: var(--orange);
 }
 
+/* ---------- Text size control ----------
+
+   Browser zoom already does this and does it better. This exists for
+   discoverability: the audience here skews older, and Ctrl+ is not something
+   everyone knows. Three steps rather than a slider, because a slider invites
+   fiddling and every intermediate value is a layout we never checked.
+
+   Each button shows its own effect — the letters are literally sized to what
+   they do — so the control explains itself without instructions. */
+
+.text-size {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 3px;
+    background: var(--card);
+}
+
+.text-size .label {
+    font-family: Oswald, "Arial Narrow", sans-serif;
+    font-size: .8rem;
+    color: var(--sage-text);
+    padding: 0 5px 0 3px;
+    letter-spacing: .02em;
+}
+
+.text-size button {
+    font-family: Oswald, "Arial Narrow", sans-serif;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--green-900);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 5px 8px;
+    cursor: pointer;
+}
+
+.text-size button:hover { background: var(--sage-200); }
+
+.text-size button[aria-pressed="true"] {
+    background: var(--green-700);
+    border-color: var(--green-700);
+    color: #fff;
+}
+
+.text-size .s1 { font-size: .8rem; }
+.text-size .s2 { font-size: 1rem; }
+.text-size .s3 { font-size: 1.2rem; }
+
+@media (max-width: 640px) {
+    .text-size { order: 3; }
+}
+
 /* ---------- Buttons ---------- */
 
 .btn {
@@ -202,12 +317,12 @@ section[id] { scroll-margin-top: 92px; }
 .btn:hover { transform: translateY(-1px); }
 
 .btn-primary {
-    background: var(--orange);
+    background: var(--orange-dark);
     color: #fff;
-    border-color: var(--orange);
+    border-color: var(--orange-dark);
 }
 
-.btn-primary:hover { background: var(--orange-dark); border-color: var(--orange-dark); color: #fff; }
+.btn-primary:hover { background: var(--orange-darker); border-color: var(--orange-darker); color: #fff; }
 
 .btn-green {
     background: var(--green-700);
@@ -256,7 +371,7 @@ section[id] { scroll-margin-top: 92px; }
     border-bottom: 1px solid var(--line);
 }
 
-.page-head h1 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); }
+.page-head h1 { font-size: clamp(1.8rem, 1rem + 2.2vw, 2.6rem); }
 .page-head p { color: var(--muted); max-width: 68ch; margin-bottom: 0; }
 
 /* ---------- Sections ---------- */
@@ -356,7 +471,7 @@ section { padding: 52px 0; }
 .ext::after {
     content: " ↗";
     font-size: .82em;
-    color: var(--sage);
+    color: var(--sage-text);
 }
 
 /* ---------- Zones (defensible space) ---------- */
@@ -447,7 +562,7 @@ section { padding: 52px 0; }
 }
 
 .rsg .ready { background: var(--green-700); }
-.rsg .set { background: var(--orange); }
+.rsg .set { background: var(--orange-dark); }
 .rsg .go { background: #9c2b16; }
 
 .rsg .stage ul { margin: 0; padding-left: 19px; font-size: .96rem; }
@@ -496,10 +611,10 @@ section { padding: 52px 0; }
     color: var(--ink);
 }
 
-.field input:focus,
-.field select:focus,
-.field textarea:focus {
-    outline: 2px solid var(--green-500);
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+    outline: 3px solid var(--green-700);
     outline-offset: 1px;
 }
 

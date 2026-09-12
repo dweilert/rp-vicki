@@ -14,9 +14,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Oswald:wght@500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/site.css">
+    <script>
+        try {
+            var s = localStorage.getItem("aafa-text-scale");
+            if (s) { document.documentElement.style.setProperty("--text-scale", s); }
+        } catch (e) { /* private mode: fall back to the default size */ }
+    </script>
 </head>
 
 <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
     <div class="emergency">
         <strong>In a fire emergency, call 911.</strong>
         Official emergency alerts for this region come from
@@ -38,10 +46,17 @@
                 <a href="evacuation.html">Evacuation</a>
                 <a href="about.html" aria-current="page">About</a>
             </nav>
+
+            <div class="text-size" role="group" aria-label="Text size">
+                <span class="label" aria-hidden="true">Aa</span>
+                <button type="button" class="s1" data-scale="1" aria-pressed="true">A</button>
+                <button type="button" class="s2" data-scale="1.15" aria-pressed="false">A</button>
+                <button type="button" class="s3" data-scale="1.3" aria-pressed="false">A</button>
+            </div>
         </div>
     </header>
 
-    <main>
+    <main id="main" tabindex="-1">
         <div class="page-head">
             <div class="wrap">
                 <p class="kicker">About us</p>

@@ -10,6 +10,68 @@
     }
 
     /* ---------------------------------------------------------------
+       Text size control.
+
+       Sets --text-scale on <html>; the stylesheet multiplies the root
+       font size by it, and everything sized in rem follows. The chosen
+       value is re-applied from localStorage by a small inline script in
+       each page's <head>, so a page paints at the reader's size instead
+       of flashing at 100% and jumping when this file runs.
+
+       localStorage throws outright in some privacy configurations rather
+       than just returning null, so every access is wrapped. A reader who
+       cannot persist the setting still gets a working control for the
+       current page — the feature degrades, it does not break.
+       --------------------------------------------------------------- */
+
+    var STORAGE_KEY = "aafa-text-scale";
+
+    function applyScale(value, buttons) {
+        document.documentElement.style.setProperty("--text-scale", value);
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute(
+                "aria-pressed",
+                buttons[i].getAttribute("data-scale") === value ? "true" : "false"
+            );
+        }
+    }
+
+    var sizer = document.querySelector(".text-size");
+    if (sizer) {
+        var sizeButtons = sizer.querySelectorAll("button[data-scale]");
+        var saved = null;
+        try {
+            saved = localStorage.getItem(STORAGE_KEY);
+        } catch (e) {
+            saved = null;
+        }
+
+        // Only honour a value the markup actually offers, so a stale or
+        // hand-edited entry cannot set an arbitrary scale.
+        var known = false;
+        for (var j = 0; j < sizeButtons.length; j++) {
+            if (sizeButtons[j].getAttribute("data-scale") === saved) {
+                known = true;
+            }
+        }
+        applyScale(known ? saved : "1", sizeButtons);
+
+        sizer.addEventListener("click", function (event) {
+            var button = event.target.closest("button[data-scale]");
+            if (!button) {
+                return;
+            }
+            var value = button.getAttribute("data-scale");
+            applyScale(value, sizeButtons);
+            try {
+                localStorage.setItem(STORAGE_KEY, value);
+            } catch (e) {
+                /* Setting applies to this page; it just will not persist. */
+            }
+        });
+    }
+
+    /* ---------------------------------------------------------------
        Signup / question form.
 
        Three states, in order of preference:

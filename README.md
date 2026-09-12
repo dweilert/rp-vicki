@@ -121,6 +121,51 @@ These are not style preferences; they are why the site is safe to publish.
   a number — zone distances, vent mesh size, branch clearance — check it
   against the source first.
 
+## Accessibility
+
+The audience skews toward older homeowners, so this is a functional
+requirement here, not a checkbox.
+
+What the site does:
+
+- **Text size control** (`Aa`) in the header — 100% / 115% / 130%. Sets
+  `--text-scale` on `<html>`; the stylesheet multiplies the root font size by
+  it. The choice is stored in `localStorage` and re-applied by a small inline
+  script in each page's `<head>`, so pages paint at the reader's size instead
+  of flashing at 100%.
+- **Skip link** to `#main` on every page, so keyboard and screen-reader users
+  can bypass the emergency strip, banner, brand, and nav.
+- **Visible focus ring** via `:focus-visible` — global, so new links inherit it.
+- **The 911 line first in the DOM** on every page, ahead of the branding.
+- Labelled form fields, `alt` on images, `lang`, ordered headings,
+  `aria-current` on the active nav item, `prefers-reduced-motion` respected.
+
+### Sizing rules that keep the Aa control working
+
+**Size text in `rem`, never `px`.** A `px` font size ignores `--text-scale`
+entirely, so the Aa button appears to do nothing to that element. Padding,
+borders, and fixed image dimensions in `px` are fine — only type matters.
+
+For `clamp()` headings, the middle term needs a `rem` component
+(`clamp(2.1rem, 1.2rem + 2.6vw, 3.2rem)`). A pure `vw` middle term scales with
+the window and ignores the reader's setting.
+
+### Colour rules
+
+There are **two oranges**, and the distinction is load-bearing:
+
+- `--orange` `#da7b37` — the logo tone. Decoration only: dots, rules, card
+  top-borders. White text on it is 3.06:1, which fails WCAG AA.
+- `--orange-dark` `#a85512` — anything containing words. 5.29:1 with white,
+  5.06:1 as text on the page background.
+
+Same split for sage: `--sage` is decorative (2.6:1), `--sage-text` is for text
+(4.97:1). The logo image itself is untouched and keeps the true flame colour —
+logos are exempt from contrast rules, interface text is not.
+
+If you add a colour, check it before shipping. Target 4.5:1 for normal text,
+3:1 for text at or above 24px (or 18.66px bold).
+
 ## Contact address and mailing list
 
 Both are switched on in `src/js/config.js`, and both are off right now.
